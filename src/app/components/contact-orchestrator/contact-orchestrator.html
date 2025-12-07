@@ -1,0 +1,64 @@
+<div class="container">
+  <mat-card class="header-card">
+    <mat-card-header>
+      <mat-card-title>Contact Orchestrator</mat-card-title>
+      <mat-card-subtitle>Fibonacci indexed contacts are highlighted</mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>Add New Contact</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="firstName" placeholder="Enter your name">
+          @if (firstName.hasError('required') && firstName.touched) {
+            <mat-error>Name is required</mat-error>
+          } @else if (firstName.hasError('minlength')) {
+            <mat-error>Minimum 2 characters required</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Phone Number</mat-label>
+          <input matInput formControlName="phoneNumber" placeholder="+3112345679">
+          @if (phoneNumber.hasError('required') && phoneNumber.touched) {
+            <mat-error>Phone number is required</mat-error>
+          } @else if (phoneNumber.hasError('pattern')) {
+            <mat-error>Enter a valid phone number (e.g., +3112345679)</mat-error>
+          }
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit">Save</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  @if (contactService.contacts().length > 0) {
+    <mat-card class="list-card">
+      <mat-card-header>
+        <mat-card-title>Contacts</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          @for (contact of contactService.contacts(); track $index) {
+            <mat-list-item [class.fibonacci]="$index | isFibonacci">
+              <div matListItemTitle>
+                <strong>{{ contact.firstName }}</strong> - {{ contact.phoneNumber }}
+              </div>
+              <div matListItemLine>{{ contact.joke }}</div>
+              <button mat-icon-button color="warn" matListItemMeta (click)="onDelete($index)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-list-item>
+            @if (!$last) {
+              <mat-divider></mat-divider>
+            }
+          }
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

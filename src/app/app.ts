@@ -1,11 +1,12 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { ContactOrchestrator } from './components/contact-orchestrator/contact-orchestrator';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  standalone: true,
+  imports: [ContactOrchestrator],
+  template: `<app-contact-orchestrator></app-contact-orchestrator>`,
+  styleUrls: ['./app.scss']
 })
 export class App {
   protected readonly title = signal('chuck-norris');
